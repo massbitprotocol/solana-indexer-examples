@@ -1,34 +1,5 @@
-[package]
-name = "indexer-metaplex"
-version = "0.0.1"
-description = "Metaplex Indexer"
-authors = ["Metaplex Maintainers <contact@massbit.io>"]
-repository = "https://github.com/massbitprotocol/solana-indexer-examples.git"
-license = "Apache-2.0"
-edition = "2018"
-
-[dependencies]
-num-derive = "0.3"
-num-traits = "0.2"
-arrayref = "0.3.6"
-solana-program = "1.7.11"
-spl-token = { version="3.1.1", features = [ "no-entrypoint" ] }
-thiserror = "1.0"
-borsh = "0.9.1"
-lazy_static = "1.4.0"
-[dependencies.smpl-metaplex]
-package = "mpl-metaplex"
-git = "https://github.com/metaplex-foundation/metaplex-program-library.git"
-
-#Massbit dependencies
-[dependencies.massbit-solana-sdk]
-package = "massbit-solana-sdk"
-git = "https://github.com/massbitprotocol/massbitprotocol.git"
-branch = "main"
-
-[dev-dependencies]
-solana-sdk = "1.7.11"
-solana-program-test = "1.7.11"
-libloading      =   "0.7"
-[lib]
-crate-type = ["cdylib", "lib"]
+[workspace]
+members = [
+    "indexer-logic",
+    "unpack-instruction"
+]
