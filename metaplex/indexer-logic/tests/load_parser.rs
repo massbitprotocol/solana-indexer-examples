@@ -4,11 +4,11 @@ use massbit_solana_sdk::smart_contract::{InstructionInterface, InstructionParser
 
 const UNPACKING_LIB_PATH : &str = "/home/viettai/Massbit/solana-indexer-examples/metaplex/unpack-instruction/target/release/libunpack_instruction.so";
 mod load_parser {
+    use std::error::Error;
     use super::*;
 
     #[tokio::test]
     async fn call_instruction_parser() {
-        println!("Test");
         unsafe {
             let lib = Arc::new(Library::new(UNPACKING_LIB_PATH).unwrap());
             // inject store to plugin
@@ -19,7 +19,16 @@ mod load_parser {
             (sm_entrypoint.register)(&mut registrar);
             if let Some(proxy) = registrar.parser_proxies.as_ref() {
                 let content: [u8; 2] = [1, 2];
-                proxy.unpack_instruction(&content);
+                match proxy.unpack_instruction(&content) {
+                    Ok(value) => {
+                        println!("{:?}", &value);
+                    }
+                    Err(err) => {
+                        println!("{:?}", &err);
+                    }
+                }
+
+
             }
         }
         assert!(true)
