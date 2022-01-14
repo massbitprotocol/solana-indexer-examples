@@ -17,18 +17,42 @@ pub const ADDRESS: &str = "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin";
 // #[doc(hidden)]
 // #[no_mangle]
 // pub static mut STORE: Option<&mut dyn IndexStore> = None;
+
+//export_plugin!(register);
+
+pub trait SolanaHandler {
+    fn handle_block(&self, _message: &String) -> Result<(), Box<dyn Error>> {
+        Ok(())
+    }
+}
+
+
+pub trait PluginRegistrar {
+    fn register_solana_handler(&mut self, handler: Box<dyn SolanaHandler + Send + Sync>);
+}
+
+#[derive(Copy, Clone)]
+pub struct AdapterDeclaration {
+    pub register: unsafe extern "C" fn(&mut dyn PluginRegistrar),
+}
+
+#[doc(hidden)]
+#[no_mangle]
+pub static adapter_declaration: AdapterDeclaration =
+    AdapterDeclaration {
+register,
+};
+
+
+#[allow(dead_code, improper_ctypes_definitions)]
+extern "C" fn register(registrar: &mut dyn PluginRegistrar) {
+    registrar.register_solana_handler(Box::new(SolanaHandlerAdapter));
+}
 //
-// export_plugin!(register);
+#[derive(Debug, Clone, PartialEq)]
+pub struct SolanaHandlerAdapter;
 //
-// #[allow(dead_code, improper_ctypes_definitions)]
-// extern "C" fn register(registrar: &mut dyn PluginRegistrar) {
-//     registrar.register_solana_handler(Box::new(SolanaHandlerAdapter));
-// }
-//
-// #[derive(Debug, Clone, PartialEq)]
-// pub struct SolanaHandlerAdapter;
-//
-// impl SolanaHandler for SolanaHandlerAdapter {
+impl SolanaHandler for SolanaHandlerAdapter {
 //     fn handle_blocks(&self, blocks: &Vec<SolanaBlock>) -> Result<i64, Box<dyn Error>> {
 //         let mut block_slot = -1_i64;
 //         // Todo: Rewrite the flush so it will flush after finish the array of blocks for better performance. For now, we flush after each block.
@@ -43,4 +67,4 @@ pub const ADDRESS: &str = "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin";
 //         }
 //         Ok(block_slot)
 //     }
-// }
+}

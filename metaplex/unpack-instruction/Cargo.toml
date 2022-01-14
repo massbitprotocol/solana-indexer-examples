@@ -1,8 +1,8 @@
 [package]
-name = "indexer-metaplex"
+name = "unpack-instruction"
 version = "0.0.1"
-description = "Metaplex Indexer"
-authors = ["Metaplex Maintainers <contact@massbit.io>"]
+description = "Unpack instruction"
+authors = ["Maintainers <contact@massbit.io>"]
 repository = "https://github.com/massbitprotocol/solana-indexer-examples.git"
 license = "Apache-2.0"
 edition = "2018"
