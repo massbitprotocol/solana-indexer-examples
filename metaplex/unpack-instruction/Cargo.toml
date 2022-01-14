@@ -16,16 +16,13 @@ spl-token = { version="3.1.1", features = [ "no-entrypoint" ] }
 thiserror = "1.0"
 borsh = "0.9.1"
 lazy_static = "1.4.0"
-[dependencies.smpl-metaplex]
+[dependencies.mpl-metaplex]
 package = "mpl-metaplex"
 git = "https://github.com/metaplex-foundation/metaplex-program-library.git"
 
-##Massbit dependencies
-#[dependencies.massbit-solana-sdk]
-#package = "massbit-solana-sdk"
-##git = "https://github.com/massbitprotocol/massbitprotocol.git"
-##branch = "main"
-#path = "../../massbitprotocol/chain/solana-sdk"
+[dependencies.transport]
+package = "transport"
+path = "../../../solana-indexer/tranport"
 
 [dev-dependencies]
 solana-sdk = "1.7.11"

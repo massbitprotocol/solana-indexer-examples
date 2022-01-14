@@ -6,3 +6,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+libloading = "0.7.2"
+#Massbit dependencies
+[dependencies.massbit-solana-sdk]
+package = "massbit-solana-sdk"
+#git = "https://github.com/massbitprotocol/massbitprotocol.git"
+#branch = "main"
+path = "../../../massbitprotocol/chain/solana-sdk"
+[dev-dependencies]
+tokio = "1.15.0"
