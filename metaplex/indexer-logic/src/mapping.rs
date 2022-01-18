@@ -19,6 +19,7 @@ use solana_transaction_status::{parse_instruction, ConfirmedBlock, TransactionWi
 use uuid::Uuid;
 
 pub fn handle_block(proxy: Arc<SmartContractProxy>, block: &SolanaBlock) -> Result<(), Box<dyn std::error::Error>> {
+    println!("Start handle_block, block.block_number: {}", block.block_number);
     for (tx_ind, tran) in block.block.transactions.iter().enumerate() {
         if tran
             .transaction
@@ -64,8 +65,10 @@ fn parse_instructions(proxy: Arc<SmartContractProxy>, block: &SolanaBlock, tran:
             //println!("account_infos {:?}", &account_infos);
             let handler = Handler {};
             // Fixme: Get account_infos from chain take a lot of time. For now, use empty vector.
+            println!("Start unpack_instruction, inst {:?}", &inst);
             match proxy.unpack_instruction(inst.data.as_slice()) {
                 Ok(trans_value) => {
+                    println!("unpack_instruction Ok, trans_value: {:?}", &trans_value);
                     handler.process(block, tran, program_key, &accounts, trans_value);
                 },
                 Err(e) => {
