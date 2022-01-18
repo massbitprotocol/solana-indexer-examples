@@ -1,27 +1,26 @@
-
 specVersion: 0.0.2
-description: Indexer for Serum
-repository: https://github.com/massbitprotocol/massbitprotocol/tree/main/user-example
+description: Indexer for solana nft
+repository: https://github.com/massbitprotocol/nft-indexer
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: solana
-    name: Saber-Indexer
+    name: nft-indexer
     network: mainnet
     source:
-      address: SSwpkEEcbUqx4vtoEByFjSkhKdCT862DNVb52nZg1UZ
-      abi: Serum,
+      address: metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s
+      abi: nft,
       start_block: 0
     mapping:
       kind: solana/BlockHandler
       apiVersion: 0.0.4
       language: rust
       entities:
-        - Serum
+        - nft
       handlers:
         - handler: handleBlock
           kind: solana/BlockHandler
       file: ./src/mapping.rs
       abis:
-        - name: Serum
-          file: ./abis/Serum.json
+        - name: nft
+          file: ./abis/nft.json

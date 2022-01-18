@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use massbit_solana_sdk::smart_contract::{TransportValue, InstructionParser, SmartContractProxy};
+use massbit_solana_sdk::smart_contract::{InstructionParser, SmartContractProxy};
 use massbit_solana_sdk::types::SolanaBlock;
 use crate::generated::handler::Handler;
 use crate::generated::instruction::*;
@@ -64,8 +64,13 @@ fn parse_instructions(proxy: Arc<SmartContractProxy>, block: &SolanaBlock, tran:
             //println!("account_infos {:?}", &account_infos);
             let handler = Handler {};
             // Fixme: Get account_infos from chain take a lot of time. For now, use empty vector.
-            if let Some(trans_value) = proxy.unpack_instruction(inst.data.as_slice()) {
-                handler.process(block, tran, program_key, &accounts, trans_value);
+            match proxy.unpack_instruction(inst.data.as_slice()) {
+                Ok(trans_value) => {
+                    handler.process(block, tran, program_key, &accounts, trans_value);
+                },
+                Err(e) => {
+                    println!("Error unpack_instruction: {:?}",e);
+                }
             }
             // }
         }

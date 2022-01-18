@@ -1,5 +1,5 @@
 use arrayref::{array_ref, array_refs};
-use bytemuck::cast;
+//use bytemuck::cast;
 use num_enum::{IntoPrimitive, TryFromPrimitive};
 use serde::{Deserialize, Serialize};
 use solana_program::{pubkey::Pubkey, sysvar::rent};
@@ -142,70 +142,4 @@ impl WithdrawOneData {
         })
     }
 }
-#[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
-pub enum RootInstruction {
-    Initialize(InitializeData),
-    Swap(SwapData),
-    Deposit(DepositData),
-    Withdraw(WithdrawData),
-    WithdrawOne(WithdrawOneData),
-    RampA(RampAData),
-    StopRampA,
-    Pause,
-    Unpause,
-    SetFeeAccount,
-    ApplyNewAdmin,
-    CommitNewAdmin,
-    SetNewFees(Fees),
-}
-impl RootInstruction {
-    pub fn unpack(input: &[u8]) -> Option<Self> {
-        println!("unpack input data {:?}", input);
-        let (&tag_slice, data) = array_refs![input, 1; ..;];
-        let tag_val = u8::from_le_bytes(tag_slice) as u32;
-        match tag_val {
-            0 => {
-                let field_slice = array_ref![data, 0, 73];
-                let inner = InitializeData::unpack(field_slice);
-                inner.and_then(|inner_val| Some(RootInstruction::Initialize(inner_val)))
-            }
-            1 => {
-                let field_slice = array_ref![data, 0, 16];
-                let inner = SwapData::unpack(field_slice);
-                inner.and_then(|inner_val| Some(RootInstruction::Swap(inner_val)))
-            }
-            2 => {
-                let field_slice = array_ref![data, 0, 24];
-                let inner = DepositData::unpack(field_slice);
-                inner.and_then(|inner_val| Some(RootInstruction::Deposit(inner_val)))
-            }
-            3 => {
-                let field_slice = array_ref![data, 0, 24];
-                let inner = WithdrawData::unpack(field_slice);
-                inner.and_then(|inner_val| Some(RootInstruction::Withdraw(inner_val)))
-            }
-            4 => {
-                let field_slice = array_ref![data, 0, 16];
-                let inner = WithdrawOneData::unpack(field_slice);
-                inner.and_then(|inner_val| Some(RootInstruction::WithdrawOne(inner_val)))
-            }
-            100 => {
-                let field_slice = array_ref![data, 0, 16];
-                let inner = RampAData::unpack(field_slice);
-                inner.and_then(|inner_val| Some(RootInstruction::RampA(inner_val)))
-            }
-            101 => Some(RootInstruction::StopRampA),
-            102 => Some(RootInstruction::Pause),
-            103 => Some(RootInstruction::Unpause),
-            104 => Some(RootInstruction::SetFeeAccount),
-            105 => Some(RootInstruction::ApplyNewAdmin),
-            106 => Some(RootInstruction::CommitNewAdmin),
-            107 => {
-                let field_slice = array_ref![data, 0, 64];
-                let inner = Fees::unpack(field_slice);
-                inner.and_then(|inner_val| Some(RootInstruction::SetNewFees(inner_val)))
-            }
-            _ => None,
-        }
-    }
-}
+

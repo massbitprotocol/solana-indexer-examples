@@ -22,7 +22,7 @@ git = "https://github.com/metaplex-foundation/metaplex-program-library.git"
 
 [dependencies.transport]
 package = "transport"
-path = "../../../solana-indexer/tranport"
+git = "https://github.com/massbitprotocol/solana-indexer.git"
 
 [dev-dependencies]
 solana-sdk = "1.7.11"

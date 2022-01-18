@@ -2,32 +2,35 @@ pub mod generated;
 pub mod mapping;
 
 use lazy_static::lazy_static;
-use massbit_solana_sdk::{export_plugin, plugin::{handler::SolanaHandler, PluginRegistrar}, SmartContractRegistrar, store::IndexStore, types::SolanaBlock};
+use massbit_solana_sdk::{export_plugin, plugin::{handler::SolanaHandler, PluginRegistrar}, store::IndexStore, types::SolanaBlock};
 use solana_client::rpc_client::RpcClient;
 use std::env;
 use std::error::Error;
 use std::sync::Arc;
 use libloading::Library;
-use massbit_solana_sdk::smart_contract::{InstructionInterface, SmartContractProxy};
+use massbit_solana_sdk::smart_contract::SmartContractProxy;
+use transport::interface::InstructionInterface;
+use massbit_solana_sdk::SmartContractRegistrar;
 
 lazy_static! {
     pub static ref SOLANA_CLIENT: Arc<RpcClient> = Arc::new(RpcClient::new(
         env::var("SOLANA_RPC_URL").unwrap_or(String::from("http://194.163.156.242:8899"))
     ));
 }
-pub const ADDRESS: &str = "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin";
+pub const ADDRESS: &str = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s";
 
 #[doc(hidden)]
 #[no_mangle]
 pub static mut STORE: Option<&mut dyn IndexStore> = None;
 
 export_plugin!(register);
+
 #[allow(dead_code, improper_ctypes_definitions)]
 extern "C" fn register(registrar: &mut dyn PluginRegistrar, unpack_lib: &String) {
     registrar.register_solana_handler(Box::new(SolanaHandlerAdapter::new(unpack_lib)));
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Clone)]
 pub struct SolanaHandlerAdapter {
     registrar: SmartContractRegistrar
 }
@@ -49,7 +52,7 @@ impl SolanaHandlerAdapter {
         }
     }
     fn get_proxy(&self) -> Option<Arc<SmartContractProxy>> {
-        self.registrar.parser_proxies.and_then(|proxy| Some(proxy.clone()))
+        self.registrar.parser_proxies.as_ref().and_then(|proxy| Some(proxy.clone()))
     }
 }
 
