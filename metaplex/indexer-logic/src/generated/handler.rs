@@ -12,12 +12,13 @@ pub trait TransportValueExt {
 }
 impl TransportValueExt for TransportValue {
     fn save(&self) {
-        unsafe {
-            STORE
-                .as_mut()
-                .unwrap()
-                .save_values(&self.name, &self.values);
-        }
+        // unsafe {
+        //     STORE
+        //         .as_mut()
+        //         .unwrap()
+        //         .save_values(&self.name, &self.values);
+        // }
+        println!("save TransportValue to DB: {:?}",&self);
     }
 }
 

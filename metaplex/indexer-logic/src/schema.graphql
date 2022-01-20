@@ -20,19 +20,14 @@ type StartAuction @entity {
 type ClaimBid @entity {
     id: ID!,
 }
-type EmptyPaymentAccount @entity {
-    id: ID!,
-    winning_config_index: Integer,
-	winning_config_item_index: Integer,
-	creator_index: Integer
-}
+
 type SetStore @entity {
     id: ID!,
-    public: bool
+    public: Boolean
 }
 type SetWhitelistedCreator @entity {
     id: ID!,
-    activated: bool
+    activated: Boolean
 }
 type DeprecatedValidateParticipation @entity {
     id: ID!,
@@ -42,7 +37,7 @@ type DeprecatedPopulateParticipationPrintingAccount @entity {
 }
 type RedeemUnusedWinningConfigItemsAsAuctioneer @entity {
     id: ID!,
-    winning_config_item_index: u8,
+    winning_config_item_index: BigInt,
 	proxy_call: String
 }
 type DecommissionAuctionManager @entity {
@@ -50,8 +45,8 @@ type DecommissionAuctionManager @entity {
 }
 type RedeemPrintingV2Bid @entity {
     id: ID!,
-    edition_offset: u64,
-	win_index: u64
+    edition_offset: BigInt,
+	win_index: BigInt
 }
 type WithdrawMasterEdition @entity {
     id: ID!,
@@ -63,12 +58,12 @@ type InitAuctionManagerV2 @entity {
     id: ID!,
     amount_type: String,
 	length_type: String,
-	max_ranges: u64
+	max_ranges: BigInt
 }
 type ValidateSafetyDepositBoxV2 @entity {
     id: ID!,
     key: String,
-	order: u64,
+	order: BigInt,
 	winning_config_type: String,
 	amount_type: String,
 	length_type: String
@@ -83,14 +78,14 @@ type EndAuction @entity {
 }
 type SetStoreIndex @entity {
     id: ID!,
-    page: u64,
-	offset: u64
+    page: BigInt,
+	offset: BigInt
 }
 type SetAuctionCache @entity {
     id: ID!,
 }
 type SetStoreV2 @entity {
     id: ID!,
-    public: bool,
+    public: Boolean,
 	settings_uri: String
 }

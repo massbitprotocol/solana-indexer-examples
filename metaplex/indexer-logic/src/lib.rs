@@ -16,7 +16,7 @@ lazy_static! {
         env::var("SOLANA_RPC_URL").unwrap_or(String::from("http://194.163.156.242:8899"))
     ));
 }
-pub const ADDRESS: &str = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s";
+pub const ADDRESS: &str = "p1exdMJcjVao65QdewkaZRUnU6VPSXhus9n2GzWfh98";
 
 #[doc(hidden)]
 #[no_mangle]
