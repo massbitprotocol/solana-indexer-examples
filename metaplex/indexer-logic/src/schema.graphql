@@ -1,4 +1,96 @@
+type DeprecatedInitAuctionManagerV1 @entity {
+    id: ID!,
+    
+}
+type DeprecatedValidateSafetyDepositBoxV1 @entity {
+    id: ID!,
+}
+type RedeemBid @entity {
+    id: ID!,
+}
+type RedeemFullRightsTransferBid @entity {
+    id: ID!,
+}
+type DeprecatedRedeemParticipationBid @entity {
+    id: ID!,
+}
+type StartAuction @entity {
+    id: ID!,
+}
+type ClaimBid @entity {
+    id: ID!,
+}
+type EmptyPaymentAccount @entity {
+    id: ID!,
+    winning_config_index: Integer,
+	winning_config_item_index: Integer,
+	creator_index: Integer
+}
+type SetStore @entity {
+    id: ID!,
+    public: bool
+}
+type SetWhitelistedCreator @entity {
+    id: ID!,
+    activated: bool
+}
+type DeprecatedValidateParticipation @entity {
+    id: ID!,
+}
+type DeprecatedPopulateParticipationPrintingAccount @entity {
+    id: ID!,
+}
+type RedeemUnusedWinningConfigItemsAsAuctioneer @entity {
+    id: ID!,
+    winning_config_item_index: u8,
+	proxy_call: String
+}
+type DecommissionAuctionManager @entity {
+    id: ID!,
+}
+type RedeemPrintingV2Bid @entity {
+    id: ID!,
+    edition_offset: u64,
+	win_index: u64
+}
+type WithdrawMasterEdition @entity {
+    id: ID!,
+}
+type DeprecatedRedeemParticipationBidV2 @entity {
+    id: ID!,
+}
+type InitAuctionManagerV2 @entity {
+    id: ID!,
+    amount_type: String,
+	length_type: String,
+	max_ranges: u64
+}
+type ValidateSafetyDepositBoxV2 @entity {
+    id: ID!,
+    key: String,
+	order: u64,
+	winning_config_type: String,
+	amount_type: String,
+	length_type: String
+}
+type RedeemParticipationBidV3 @entity {
+    id: ID!,
+    win_index: BigInt
+}
+type EndAuction @entity {
+    id: ID!,
+    
+}
 type SetStoreIndex @entity {
     id: ID!,
-	timestamp: BigInt
+    page: u64,
+	offset: u64
+}
+type SetAuctionCache @entity {
+    id: ID!,
+}
+type SetStoreV2 @entity {
+    id: ID!,
+    public: bool,
+	settings_uri: String
 }

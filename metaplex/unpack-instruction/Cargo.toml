@@ -8,6 +8,7 @@ license = "Apache-2.0"
 edition = "2018"
 
 [dependencies]
+anyhow = "1.0.52"
 num-derive = "0.3"
 num-traits = "0.2"
 arrayref = "0.3.6"
