@@ -7,7 +7,7 @@ use solana_sdk::account::Account;
 use solana_transaction_status::{parse_instruction, ConfirmedBlock, TransactionWithStatusMeta};
 use std::collections::HashMap;
 use massbit_solana_sdk::entity::{Attribute, Entity, Value};
-use transport::TransportValue;
+use massbit_solana_sdk::transport::TransportValue;
 use massbit_solana_sdk::types::SolanaBlock;
 use serde_json::to_string;
 use uuid::Uuid;

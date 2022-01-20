@@ -16,7 +16,7 @@ use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use solana_sdk::account::Account;
 use solana_transaction_status::{parse_instruction, ConfirmedBlock, TransactionWithStatusMeta};
-use transport::interface::InterfaceRegistrar;
+use massbit_solana_sdk::transport::interface::InterfaceRegistrar;
 use uuid::Uuid;
 
 pub fn handle_block(proxy: Arc<SmartContractProxy>, block: &SolanaBlock) -> Result<(), Box<dyn std::error::Error>> {

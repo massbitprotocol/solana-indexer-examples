@@ -10,7 +10,7 @@ use std::sync::Arc;
 use libloading::Library;
 use massbit_solana_sdk::smart_contract::SmartContractProxy;
 use massbit_solana_sdk::smart_contract::{InstructionInterface, InstructionParser, SmartContractRegistrar};
-use transport::interface::InterfaceRegistrar;
+use massbit_solana_sdk::transport::interface::InterfaceRegistrar;
 lazy_static! {
     pub static ref SOLANA_CLIENT: Arc<RpcClient> = Arc::new(RpcClient::new(
         env::var("SOLANA_RPC_URL").unwrap_or(String::from("http://194.163.156.242:8899"))
@@ -21,6 +21,7 @@ pub const ADDRESS: &str = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s";
 #[doc(hidden)]
 #[no_mangle]
 pub static mut STORE: Option<&mut dyn IndexStore> = None;
+#[no_mangle]
 pub static mut INTERFACE: Option<&mut dyn InstructionParser> = None;
 export_plugin!(register);
 
