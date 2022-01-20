@@ -19,7 +19,8 @@ use solana_transaction_status::{parse_instruction, ConfirmedBlock, TransactionWi
 use massbit_solana_sdk::transport::interface::InterfaceRegistrar;
 use uuid::Uuid;
 
-pub fn handle_block(proxy: Arc<SmartContractProxy>, block: &SolanaBlock) -> Result<(), Box<dyn std::error::Error>> {
+
+pub fn handle_block(interface: &mut dyn InstructionParser, block: &SolanaBlock) -> Result<(), Box<dyn std::error::Error>> {
     println!("Start handle_block, block.block_number: {}", block.block_number);
     for (tx_ind, tran) in block.block.transactions.iter().enumerate() {
         if tran
@@ -29,12 +30,12 @@ pub fn handle_block(proxy: Arc<SmartContractProxy>, block: &SolanaBlock) -> Resu
             .iter()
             .any(|key| key.to_string().as_str() == ADDRESS)
         {
-            let entities = parse_instructions(proxy.clone(), block, tran, tx_ind);
+            let entities = parse_instructions(interface, block, tran, tx_ind);
         }
     }
     Ok(())
 }
-fn parse_instructions(proxy: Arc<SmartContractProxy>, block: &SolanaBlock, tran: &TransactionWithStatusMeta, tx_ind: usize) {
+fn parse_instructions(interface: &mut dyn InstructionParser, block: &SolanaBlock, tran: &TransactionWithStatusMeta, tx_ind: usize) {
     for (ind, inst) in tran.transaction.message.instructions.iter().enumerate() {
         let program_key = inst.program_id(tran.transaction.message.account_keys.as_slice());
         if program_key.to_string().as_str() == ADDRESS {
@@ -46,87 +47,7 @@ fn parse_instructions(proxy: Arc<SmartContractProxy>, block: &SolanaBlock, tran:
                 Ok(())
             };
             inst.visit_each_account(&mut work);
-            // if let Some(account_infos) = SOLANA_CLIENT
-            //     .get_multiple_accounts_with_config(
-            //         accounts.as_slice(),
-            //         RpcAccountInfoConfig {
-            //             encoding: Some(UiAccountEncoding::JsonParsed),
-            //             commitment: None,
-            //             data_slice: None,
-            //         },
-            //     )
-            //     .map(|res| {
-            //         res.value
-            //             .into_iter()
-            //             .filter_map(|elm| elm)
-            //             .collect::<Vec<Account>>()
-            //     })
-            //     .ok()
-            // {
-            //println!("account_infos {:?}", &account_infos);
-            let handler = Handler {};
-            // Fixme: Get account_infos from chain take a lot of time. For now, use empty vector.
-            println!("Start unpack_instruction, inst {:?}", &inst);
-            match proxy.unpack_instruction(inst.data.as_slice()) {
-                Ok(trans_value) => {
-                    println!("unpack_instruction Ok, trans_value: {:?}", &trans_value);
-                    handler.process(block, tran, program_key, &accounts, trans_value);
-                },
-                Err(e) => {
-                    println!("Error unpack_instruction: {:?}",e);
-                }
-            }
-            // }
-        }
-    }
-}
 
-
-pub fn handle_block2(interface: &mut dyn InstructionParser, block: &SolanaBlock) -> Result<(), Box<dyn std::error::Error>> {
-    println!("Start handle_block, block.block_number: {}", block.block_number);
-    for (tx_ind, tran) in block.block.transactions.iter().enumerate() {
-        if tran
-            .transaction
-            .message
-            .account_keys
-            .iter()
-            .any(|key| key.to_string().as_str() == ADDRESS)
-        {
-            let entities = parse_instructions2(interface, block, tran, tx_ind);
-        }
-    }
-    Ok(())
-}
-fn parse_instructions2(interface: &mut dyn InstructionParser, block: &SolanaBlock, tran: &TransactionWithStatusMeta, tx_ind: usize) {
-    for (ind, inst) in tran.transaction.message.instructions.iter().enumerate() {
-        let program_key = inst.program_id(tran.transaction.message.account_keys.as_slice());
-        if program_key.to_string().as_str() == ADDRESS {
-            let mut accounts = Vec::default();
-            let mut work = |unique_ind: usize, acc_ind: usize| {
-                if let Some(key) = tran.transaction.message.account_keys.get(acc_ind) {
-                    accounts.push(key.clone());
-                };
-                Ok(())
-            };
-            inst.visit_each_account(&mut work);
-            // if let Some(account_infos) = SOLANA_CLIENT
-            //     .get_multiple_accounts_with_config(
-            //         accounts.as_slice(),
-            //         RpcAccountInfoConfig {
-            //             encoding: Some(UiAccountEncoding::JsonParsed),
-            //             commitment: None,
-            //             data_slice: None,
-            //         },
-            //     )
-            //     .map(|res| {
-            //         res.value
-            //             .into_iter()
-            //             .filter_map(|elm| elm)
-            //             .collect::<Vec<Account>>()
-            //     })
-            //     .ok()
-            // {
-            //println!("account_infos {:?}", &account_infos);
             let handler = Handler {};
             // Fixme: Get account_infos from chain take a lot of time. For now, use empty vector.
             println!("Start unpack_instruction, inst {:?}", &inst);
@@ -139,7 +60,6 @@ fn parse_instructions2(interface: &mut dyn InstructionParser, block: &SolanaBloc
                     println!("Error unpack_instruction: {:?}",e);
                 }
             }
-            // }
         }
     }
 }

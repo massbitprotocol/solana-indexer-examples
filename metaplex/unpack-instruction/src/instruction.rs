@@ -8,7 +8,7 @@ use transport::TransportValue;
 pub struct InstructionParser;
 
 impl InstructionParserTrait for InstructionParser {
-    fn unpack_instruction(&self, input: &[u8]) -> Result<TransportValue, Box<dyn Error>> {
+    fn unpack_instruction(&self, input: &[u8]) -> Result<TransportValue, anyhow::Error> {
         println!("Unpack instruction");
         let instruction = MetaplexInstruction::try_from_slice(input)?;
         match instruction {
