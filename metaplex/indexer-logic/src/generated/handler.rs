@@ -1,6 +1,9 @@
 use crate::STORE;
 use massbit_solana_sdk::entity::{Attribute, Entity, Value};
-use massbit_solana_sdk::{transport::TransportValue, types::SolanaBlock};
+use massbit_solana_sdk::{
+    transport::{TransportValue, Value as TransValue},
+    types::SolanaBlock,
+};
 use serde_json;
 use solana_program::pubkey::Pubkey;
 use solana_transaction_status::TransactionWithStatusMeta;
@@ -12,13 +15,12 @@ pub trait TransportValueExt {
 }
 impl TransportValueExt for TransportValue {
     fn save(&self) {
-        // unsafe {
-        //     STORE
-        //         .as_mut()
-        //         .unwrap()
-        //         .save_values(&self.name, &self.values);
-        // }
-        println!("save TransportValue to DB: {:?}",&self);
+        unsafe {
+            STORE
+                .as_mut()
+                .unwrap()
+                .save_values(&self.name, &self.values);
+        }
     }
 }
 
@@ -30,7 +32,7 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        mut input: TransportValue,
     ) {
         //println!("Process block {} with input {:?}", block.block_number, input);
         match input.name.as_str() {
@@ -40,7 +42,7 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
-                    input,
+                    &mut input,
                 );
             }
             "DeprecatedValidateSafetyDepositBoxV1" => {
@@ -49,10 +51,11 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
+                    &mut input,
                 );
             }
             "RedeemBid" => {
-                self.process_redeem_bid(block, transaction, program_id, accounts);
+                self.process_redeem_bid(block, transaction, program_id, accounts, &mut input);
             }
             "RedeemFullRightsTransferBid" => {
                 self.process_redeem_full_rights_transfer_bid(
@@ -60,6 +63,7 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
+                    &mut input,
                 );
             }
             "DeprecatedRedeemParticipationBid" => {
@@ -68,19 +72,26 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
+                    &mut input,
                 );
             }
             "StartAuction" => {
-                self.process_start_auction(block, transaction, program_id, accounts);
+                self.process_start_auction(block, transaction, program_id, accounts, &mut input);
             }
             "ClaimBid" => {
-                self.process_claim_bid(block, transaction, program_id, accounts);
+                self.process_claim_bid(block, transaction, program_id, accounts, &mut input);
             }
             "EmptyPaymentAccount" => {
-                self.process_empty_payment_account(block, transaction, program_id, accounts, input);
+                self.process_empty_payment_account(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
             }
             "SetStore" => {
-                self.process_set_store(block, transaction, program_id, accounts, input);
+                self.process_set_store(block, transaction, program_id, accounts, &mut input);
             }
             "SetWhitelistedCreator" => {
                 self.process_set_whitelisted_creator(
@@ -88,7 +99,7 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
-                    input,
+                    &mut input,
                 );
             }
             "DeprecatedValidateParticipation" => {
@@ -97,6 +108,7 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
+                    &mut input,
                 );
             }
             "DeprecatedPopulateParticipationPrintingAccount" => {
@@ -105,6 +117,7 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
+                    &mut input,
                 );
             }
             "RedeemUnusedWinningConfigItemsAsAuctioneer" => {
@@ -113,11 +126,17 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
-                    input,
+                    &mut input,
                 );
             }
             "DecommissionAuctionManager" => {
-                self.process_decommission_auction_manager(block, transaction, program_id, accounts);
+                self.process_decommission_auction_manager(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
             }
             "RedeemPrintingV2Bid" => {
                 self.process_redeem_printing_v2_bid(
@@ -125,11 +144,17 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
-                    input,
+                    &mut input,
                 );
             }
             "WithdrawMasterEdition" => {
-                self.process_withdraw_master_edition(block, transaction, program_id, accounts);
+                self.process_withdraw_master_edition(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
             }
             "DeprecatedRedeemParticipationBidV2" => {
                 self.process_deprecated_redeem_participation_bid_v2(
@@ -137,6 +162,7 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
+                    &mut input,
                 );
             }
             "InitAuctionManagerV2" => {
@@ -145,7 +171,7 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
-                    input,
+                    &mut input,
                 );
             }
             "ValidateSafetyDepositBoxV2" => {
@@ -154,7 +180,7 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
-                    input,
+                    &mut input,
                 );
             }
             "RedeemParticipationBidV3" => {
@@ -163,20 +189,26 @@ impl Handler {
                     transaction,
                     program_id,
                     accounts,
-                    input,
+                    &mut input,
                 );
             }
             "EndAuction" => {
-                self.process_end_auction(block, transaction, program_id, accounts, input);
+                self.process_end_auction(block, transaction, program_id, accounts, &mut input);
             }
             "SetStoreIndex" => {
-                self.process_set_store_index(block, transaction, program_id, accounts, input);
+                self.process_set_store_index(block, transaction, program_id, accounts, &mut input);
             }
             "SetAuctionCache" => {
-                self.process_set_auction_cache(block, transaction, program_id, accounts);
+                self.process_set_auction_cache(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
             }
             "SetStoreV2" => {
-                self.process_set_store_v2(block, transaction, program_id, accounts, input);
+                self.process_set_store_v2(block, transaction, program_id, accounts, &mut input);
             }
             _ => {}
         }
@@ -187,14 +219,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -204,14 +248,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_redeem_bid(
@@ -220,14 +277,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_redeem_full_rights_transfer_bid(
@@ -236,14 +306,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_deprecated_redeem_participation_bid(
@@ -252,14 +335,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_start_auction(
@@ -268,14 +364,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_claim_bid(
@@ -284,14 +393,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_empty_payment_account(
@@ -300,14 +422,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -317,14 +451,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -334,14 +480,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -351,14 +509,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_deprecated_populate_participation_printing_account(
@@ -367,14 +538,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_redeem_unused_winning_config_items_as_auctioneer(
@@ -383,14 +567,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -400,14 +596,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_redeem_printing_v2_bid(
@@ -416,14 +625,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -433,14 +654,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_deprecated_redeem_participation_bid_v2(
@@ -449,14 +683,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_init_auction_manager_v2(
@@ -465,14 +712,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -482,14 +741,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -499,14 +770,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -516,14 +799,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -533,14 +828,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }
@@ -550,14 +857,27 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
-            "call function process_initialize for handle incoming block {} without argument.",
-            block.block_number
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
-
-        //Entity::from(input).save("Initialize");
-        println!("Write to db");
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+        input.save();
+        println!("Write to db {:?}", input);
         Ok(())
     }
     fn process_set_store_v2(
@@ -566,14 +886,26 @@ impl Handler {
         transaction: &TransactionWithStatusMeta,
         program_id: &Pubkey,
         accounts: &Vec<Pubkey>,
-        input: TransportValue,
+        input: &mut TransportValue,
     ) -> Result<(), anyhow::Error> {
         println!(
             "call function process_initialize for handle incoming block {} with argument {:?}",
             block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
         input.save();
-        //Entity::from(input).save("Initialize");
         println!("Write to db {:?}", input);
         Ok(())
     }

@@ -8,7 +8,6 @@ use transport::{TransportValue, Value};
 pub struct InstructionParser;
 impl InstructionParserTrait for InstructionParser {
     fn unpack_instruction(&self, input: &[u8]) -> Result<TransportValue, anyhow::Error> {
-        println!("Unpack instruction");
         let instruction = MetaplexInstruction::try_from_slice(input)?;
         match instruction {
             MetaplexInstruction::DeprecatedInitAuctionManagerV1(input) => {
@@ -76,38 +75,44 @@ impl InstructionParser {
         let mut transport_value = TransportValue::new("DeprecatedInitAuctionManagerV1");
         transport_value.set_value(
             "winning_configs",
-            Value::String(format!("{:?}", input.winning_configs)),
+            Value::from(
+                input
+                    .winning_configs
+                    .iter()
+                    .map(|item| format!("{:?}", item))
+                    .collect::<Vec<String>>(),
+            ),
         );
         transport_value.set_value(
             "participation_config",
-            Value::String(format!("{:?}", input.participation_config)),
+            Value::from(input.participation_config.map(|item| format!("{:?}", item))),
         );
         Ok(transport_value)
     }
     fn unpack_deprecated_validate_safety_deposit_box_v1(
         &self,
     ) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("DeprecatedValidateSafetyDepositBoxV1");
         Ok(transport_value)
     }
     fn unpack_redeem_bid(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("RedeemBid");
         Ok(transport_value)
     }
     fn unpack_redeem_full_rights_transfer_bid(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("RedeemFullRightsTransferBid");
         Ok(transport_value)
     }
     fn unpack_deprecated_redeem_participation_bid(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("DeprecatedRedeemParticipationBid");
         Ok(transport_value)
     }
     fn unpack_start_auction(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("StartAuction");
         Ok(transport_value)
     }
     fn unpack_claim_bid(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("ClaimBid");
         Ok(transport_value)
     }
     fn unpack_empty_payment_account(
@@ -117,16 +122,13 @@ impl InstructionParser {
         let mut transport_value = TransportValue::new("EmptyPaymentAccount");
         transport_value.set_value(
             "winning_config_index",
-            Value::String(format!("{:?}", input.winning_config_index)),
+            Value::from(input.winning_config_index),
         );
         transport_value.set_value(
             "winning_config_item_index",
-            Value::String(format!("{:?}", input.winning_config_item_index)),
+            Value::from(input.winning_config_item_index),
         );
-        transport_value.set_value(
-            "creator_index",
-            Value::String(format!("{:?}", input.creator_index)),
-        );
+        transport_value.set_value("creator_index", Value::from(input.creator_index));
         Ok(transport_value)
     }
     fn unpack_set_store(
@@ -146,13 +148,14 @@ impl InstructionParser {
         Ok(transport_value)
     }
     fn unpack_deprecated_validate_participation(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("DeprecatedValidateParticipation");
         Ok(transport_value)
     }
     fn unpack_deprecated_populate_participation_printing_account(
         &self,
     ) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value =
+            TransportValue::new("DeprecatedPopulateParticipationPrintingAccount");
         Ok(transport_value)
     }
     fn unpack_redeem_unused_winning_config_items_as_auctioneer(
@@ -176,7 +179,7 @@ impl InstructionParser {
         Ok(transport_value)
     }
     fn unpack_decommission_auction_manager(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("DecommissionAuctionManager");
         Ok(transport_value)
     }
     fn unpack_redeem_printing_v2_bid(
@@ -189,13 +192,13 @@ impl InstructionParser {
         Ok(transport_value)
     }
     fn unpack_withdraw_master_edition(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("WithdrawMasterEdition");
         Ok(transport_value)
     }
     fn unpack_deprecated_redeem_participation_bid_v2(
         &self,
     ) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("DeprecatedRedeemParticipationBidV2");
         Ok(transport_value)
     }
     fn unpack_init_auction_manager_v2(
@@ -327,15 +330,21 @@ impl InstructionParser {
         );
         transport_value.set_value(
             "amount_ranges",
-            Value::String(format!("{:?}", input.amount_ranges)),
+            Value::from(
+                input
+                    .amount_ranges
+                    .iter()
+                    .map(|item| format!("{:?}", item))
+                    .collect::<Vec<String>>(),
+            ),
         );
         transport_value.set_value(
             "participation_config",
-            Value::String(format!("{:?}", input.participation_config)),
+            Value::from(input.participation_config.map(|item| format!("{:?}", item))),
         );
         transport_value.set_value(
             "participation_state",
-            Value::String(format!("{:?}", input.participation_state)),
+            Value::from(input.participation_state.map(|item| format!("{:?}", item))),
         );
         Ok(transport_value)
     }
@@ -344,7 +353,7 @@ impl InstructionParser {
         input: mpl_metaplex::instruction::RedeemParticipationBidV3Args,
     ) -> Result<TransportValue, anyhow::Error> {
         let mut transport_value = TransportValue::new("RedeemParticipationBidV3");
-        transport_value.set_value("win_index", Value::String(format!("{:?}", input.win_index)));
+        transport_value.set_value("win_index", Value::from(input.win_index));
         Ok(transport_value)
     }
     fn unpack_end_auction(
@@ -352,7 +361,7 @@ impl InstructionParser {
         input: mpl_metaplex::instruction::EndAuctionArgs,
     ) -> Result<TransportValue, anyhow::Error> {
         let mut transport_value = TransportValue::new("EndAuction");
-        transport_value.set_value("reveal", Value::String(format!("{:?}", input.reveal)));
+        transport_value.set_value("reveal", Value::Null);
         Ok(transport_value)
     }
     fn unpack_set_store_index(
@@ -365,7 +374,7 @@ impl InstructionParser {
         Ok(transport_value)
     }
     fn unpack_set_auction_cache(&self) -> Result<TransportValue, anyhow::Error> {
-        let mut transport_value = TransportValue::default();
+        let mut transport_value = TransportValue::new("SetAuctionCache");
         Ok(transport_value)
     }
     fn unpack_set_store_v2(
@@ -374,10 +383,7 @@ impl InstructionParser {
     ) -> Result<TransportValue, anyhow::Error> {
         let mut transport_value = TransportValue::new("SetStoreV2");
         transport_value.set_value("public", Value::from(input.public));
-        transport_value.set_value(
-            "settings_uri",
-            Value::String(format!("{:?}", input.settings_uri)),
-        );
+        transport_value.set_value("settings_uri", Value::Null);
         Ok(transport_value)
     }
 }
