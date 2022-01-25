@@ -1,166 +1,169 @@
-type DeprecatedInitAuctionManagerV1 @entity {
+type CreateMetadataAccount @entity {
     id: ID!,
     block_timestamp: BigInt!,
     tx_hash: String,
-    account_name: String
-}
-type DeprecatedValidateSafetyDepositBoxV1 @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type RedeemBid @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type RedeemFullRightsTransferBid @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type DeprecatedRedeemParticipationBid @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type StartAuction @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type ClaimBid @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type EmptyPaymentAccount @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    winning_config_index: Int,
-	winning_config_item_index: Int,
-	creator_index: Int,
+    data: String,
+	is_mutable: Boolean,
 	account_name: String
 }
-type SetStore @entity {
+type UpdateMetadataAccount @entity {
     id: ID!,
     block_timestamp: BigInt!,
     tx_hash: String,
-    public: Boolean,
+    primary_sale_happened: Boolean,
 	account_name: String
 }
-type SetWhitelistedCreator @entity {
+type DeprecatedCreateMasterEdition @entity {
     id: ID!,
     block_timestamp: BigInt!,
     tx_hash: String,
-    activated: Boolean,
+    max_supply: BigInt,
 	account_name: String
 }
-type DeprecatedValidateParticipation @entity {
+type DeprecatedMintNewEditionFromMasterEditionViaPrintingToken @entity {
     id: ID!,
     block_timestamp: BigInt!,
     tx_hash: String,
     account_name: String
 }
-type DeprecatedPopulateParticipationPrintingAccount @entity {
+type UpdatePrimarySaleHappenedViaToken @entity {
     id: ID!,
     block_timestamp: BigInt!,
     tx_hash: String,
     account_name: String
 }
-type RedeemUnusedWinningConfigItemsAsAuctioneer @entity {
+type DeprecatedSetReservationList @entity {
     id: ID!,
     block_timestamp: BigInt!,
     tx_hash: String,
-    winning_config_item_index: Int,
-	proxy_call: String,
-	account_name: String
-}
-type DecommissionAuctionManager @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type RedeemPrintingV2Bid @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    edition_offset: BigInt,
-	win_index: BigInt,
-	account_name: String
-}
-type WithdrawMasterEdition @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type DeprecatedRedeemParticipationBidV2 @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type InitAuctionManagerV2 @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    amount_type: String,
-	length_type: String,
-	max_ranges: BigInt,
-	account_name: String
-}
-type ValidateSafetyDepositBoxV2 @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    key: String,
-	order: BigInt,
-	winning_config_type: String,
-	amount_type: String,
-	length_type: String,
-	account_name: String
-}
-type RedeemParticipationBidV3 @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    win_index: BigInt,
-	account_name: String
-}
-type EndAuction @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    account_name: String
-}
-type SetStoreIndex @entity {
-    id: ID!,
-    block_timestamp: BigInt!,
-    tx_hash: String,
-    page: BigInt,
+    total_reservation_spots: BigInt,
 	offset: BigInt,
+	total_spot_offset: BigInt,
 	account_name: String
 }
-type SetAuctionCache @entity {
+type DeprecatedCreateReservationList @entity {
     id: ID!,
     block_timestamp: BigInt!,
     tx_hash: String,
     account_name: String
 }
-type SetStoreV2 @entity {
+type SignMetadata @entity {
     id: ID!,
     block_timestamp: BigInt!,
     tx_hash: String,
-    public: Boolean,
-	settings_uri: String,
+    account_name: String
+}
+type DeprecatedMintPrintingTokensViaToken @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    supply: BigInt,
 	account_name: String
+}
+type DeprecatedMintPrintingTokens @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    supply: BigInt,
+	account_name: String
+}
+type CreateMasterEdition @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    max_supply: BigInt,
+	account_name: String
+}
+type MintNewEditionFromMasterEditionViaToken @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    edition: BigInt,
+	account_name: String
+}
+type ConvertMasterEditionV1ToV2 @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    account_name: String
+}
+type MintNewEditionFromMasterEditionViaVaultProxy @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    edition: BigInt,
+	account_name: String
+}
+type PuffMetadata @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    account_name: String
+}
+type UpdateMetadataAccountV2 @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    primary_sale_happened: Boolean,
+	is_mutable: Boolean,
+	account_name: String
+}
+type CreateMetadataAccountV2 @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    data: String,
+	is_mutable: Boolean,
+	account_name: String
+}
+type CreateMasterEditionV3 @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    max_supply: BigInt,
+	account_name: String
+}
+type VerifyCollection @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    account_name: String
+}
+type Utilize @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    number_of_uses: BigInt,
+	account_name: String
+}
+type ApproveUseAuthority @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    number_of_uses: BigInt,
+	account_name: String
+}
+type RevokeUseAuthority @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    account_name: String
+}
+type UnverifyCollection @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    account_name: String
+}
+type ApproveCollectionAuthority @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    
+}
+type RevokeCollectionAuthority @entity {
+    id: ID!,
+    block_timestamp: BigInt!,
+    tx_hash: String,
+    
 }

@@ -1,0 +1,63 @@
+[package]
+name = "indexer-logic"
+version = "0.0.1"
+description = "Indexer logic"
+authors = ["Maintainers <contact@massbit.io>"]
+repository = "https://github.com/massbitprotocol/solana-indexer-examples.git"
+license = "Apache-2.0"
+edition = "2018"
+
+[dependencies]
+diesel = { version = "1.4.0", features = ["postgres"] }
+chrono = "0.4.19"
+hex = "0.4.3"
+anyhow = "1.0.44"
+uuid = { version = "0.8", features = ["serde", "v4"] }
+arbitrary = { version = "0.4.6", features = ["derive"], optional = true }
+log = "0.4.14"
+num_enum = "0.5.0"
+thiserror = "1.0.20"
+safe-transmute = "0.11.0"
+lazy_static     = "1.4.0"
+serde = "1.0.114"
+serde_json = "1.0.69"
+static_assertions = "1.1.0"
+spl-token = { version = "3.0.0-pre1", features = ["no-entrypoint"] }
+
+[dependencies.massbit-solana-sdk]
+package = "massbit-solana-sdk"
+#git = "https://github.com/massbitprotocol/massbitprotocol.git"
+#branch = "main"
+path = "../../../massbitprotocol/chain/solana-sdk"
+
+[dependencies.solana-transaction-status]
+package = "solana-transaction-status"
+git = "https://github.com/massbitprotocol/solana.git"
+branch = "massbit"
+
+[dependencies.solana-account-decoder]
+package = "solana-account-decoder"
+git = "https://github.com/massbitprotocol/solana.git"
+branch = "massbit"
+
+
+[dependencies.solana-client]
+package = "solana-client"
+git = "https://github.com/massbitprotocol/solana.git"
+branch = "massbit"
+
+[dependencies.solana-sdk]
+package = "solana-sdk"
+git = "https://github.com/massbitprotocol/solana.git"
+branch = "massbit"
+
+[dependencies.solana-program]
+package = "solana-program"
+git = "https://github.com/massbitprotocol/solana.git"
+branch = "massbit"
+
+[dev-dependencies]
+tokio = "1.15.0"
+
+[lib]
+crate-type = ["cdylib", "lib"]            

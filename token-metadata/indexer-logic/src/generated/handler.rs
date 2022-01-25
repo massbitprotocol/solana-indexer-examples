@@ -36,8 +36,8 @@ impl Handler {
     ) {
         //println!("Process block {} with input {:?}", block.block_number, input);
         match input.name.as_str() {
-            "DeprecatedInitAuctionManagerV1" => {
-                self.process_deprecated_init_auction_manager_v1(
+            "CreateMetadataAccount" => {
+                self.process_create_metadata_account(
                     block,
                     transaction,
                     program_id,
@@ -45,8 +45,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "DeprecatedValidateSafetyDepositBoxV1" => {
-                self.process_deprecated_validate_safety_deposit_box_v1(
+            "UpdateMetadataAccount" => {
+                self.process_update_metadata_account(
                     block,
                     transaction,
                     program_id,
@@ -54,11 +54,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "RedeemBid" => {
-                self.process_redeem_bid(block, transaction, program_id, accounts, &mut input);
-            }
-            "RedeemFullRightsTransferBid" => {
-                self.process_redeem_full_rights_transfer_bid(
+            "DeprecatedCreateMasterEdition" => {
+                self.process_deprecated_create_master_edition(
                     block,
                     transaction,
                     program_id,
@@ -66,8 +63,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "DeprecatedRedeemParticipationBid" => {
-                self.process_deprecated_redeem_participation_bid(
+            "DeprecatedMintNewEditionFromMasterEditionViaPrintingToken" => {
+                self.process_deprecated_mint_new_edition_from_master_edition_via_printing_token(
                     block,
                     transaction,
                     program_id,
@@ -75,14 +72,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "StartAuction" => {
-                self.process_start_auction(block, transaction, program_id, accounts, &mut input);
-            }
-            "ClaimBid" => {
-                self.process_claim_bid(block, transaction, program_id, accounts, &mut input);
-            }
-            "EmptyPaymentAccount" => {
-                self.process_empty_payment_account(
+            "UpdatePrimarySaleHappenedViaToken" => {
+                self.process_update_primary_sale_happened_via_token(
                     block,
                     transaction,
                     program_id,
@@ -90,11 +81,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "SetStore" => {
-                self.process_set_store(block, transaction, program_id, accounts, &mut input);
-            }
-            "SetWhitelistedCreator" => {
-                self.process_set_whitelisted_creator(
+            "DeprecatedSetReservationList" => {
+                self.process_deprecated_set_reservation_list(
                     block,
                     transaction,
                     program_id,
@@ -102,8 +90,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "DeprecatedValidateParticipation" => {
-                self.process_deprecated_validate_participation(
+            "DeprecatedCreateReservationList" => {
+                self.process_deprecated_create_reservation_list(
                     block,
                     transaction,
                     program_id,
@@ -111,8 +99,11 @@ impl Handler {
                     &mut input,
                 );
             }
-            "DeprecatedPopulateParticipationPrintingAccount" => {
-                self.process_deprecated_populate_participation_printing_account(
+            "SignMetadata" => {
+                self.process_sign_metadata(block, transaction, program_id, accounts, &mut input);
+            }
+            "DeprecatedMintPrintingTokensViaToken" => {
+                self.process_deprecated_mint_printing_tokens_via_token(
                     block,
                     transaction,
                     program_id,
@@ -120,8 +111,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "RedeemUnusedWinningConfigItemsAsAuctioneer" => {
-                self.process_redeem_unused_winning_config_items_as_auctioneer(
+            "DeprecatedMintPrintingTokens" => {
+                self.process_deprecated_mint_printing_tokens(
                     block,
                     transaction,
                     program_id,
@@ -129,8 +120,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "DecommissionAuctionManager" => {
-                self.process_decommission_auction_manager(
+            "CreateMasterEdition" => {
+                self.process_create_master_edition(
                     block,
                     transaction,
                     program_id,
@@ -138,8 +129,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "RedeemPrintingV2Bid" => {
-                self.process_redeem_printing_v2_bid(
+            "MintNewEditionFromMasterEditionViaToken" => {
+                self.process_mint_new_edition_from_master_edition_via_token(
                     block,
                     transaction,
                     program_id,
@@ -147,8 +138,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "WithdrawMasterEdition" => {
-                self.process_withdraw_master_edition(
+            "ConvertMasterEditionV1ToV2" => {
+                self.process_convert_master_edition_v1_to_v2(
                     block,
                     transaction,
                     program_id,
@@ -156,8 +147,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "DeprecatedRedeemParticipationBidV2" => {
-                self.process_deprecated_redeem_participation_bid_v2(
+            "MintNewEditionFromMasterEditionViaVaultProxy" => {
+                self.process_mint_new_edition_from_master_edition_via_vault_proxy(
                     block,
                     transaction,
                     program_id,
@@ -165,8 +156,11 @@ impl Handler {
                     &mut input,
                 );
             }
-            "InitAuctionManagerV2" => {
-                self.process_init_auction_manager_v2(
+            "PuffMetadata" => {
+                self.process_puff_metadata(block, transaction, program_id, accounts, &mut input);
+            }
+            "UpdateMetadataAccountV2" => {
+                self.process_update_metadata_account_v2(
                     block,
                     transaction,
                     program_id,
@@ -174,8 +168,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "ValidateSafetyDepositBoxV2" => {
-                self.process_validate_safety_deposit_box_v2(
+            "CreateMetadataAccountV2" => {
+                self.process_create_metadata_account_v2(
                     block,
                     transaction,
                     program_id,
@@ -183,8 +177,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "RedeemParticipationBidV3" => {
-                self.process_redeem_participation_bid_v3(
+            "CreateMasterEditionV3" => {
+                self.process_create_master_edition_v3(
                     block,
                     transaction,
                     program_id,
@@ -192,14 +186,8 @@ impl Handler {
                     &mut input,
                 );
             }
-            "EndAuction" => {
-                self.process_end_auction(block, transaction, program_id, accounts, &mut input);
-            }
-            "SetStoreIndex" => {
-                self.process_set_store_index(block, transaction, program_id, accounts, &mut input);
-            }
-            "SetAuctionCache" => {
-                self.process_set_auction_cache(
+            "VerifyCollection" => {
+                self.process_verify_collection(
                     block,
                     transaction,
                     program_id,
@@ -207,13 +195,58 @@ impl Handler {
                     &mut input,
                 );
             }
-            "SetStoreV2" => {
-                self.process_set_store_v2(block, transaction, program_id, accounts, &mut input);
+            "Utilize" => {
+                self.process_utilize(block, transaction, program_id, accounts, &mut input);
+            }
+            "ApproveUseAuthority" => {
+                self.process_approve_use_authority(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
+            }
+            "RevokeUseAuthority" => {
+                self.process_revoke_use_authority(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
+            }
+            "UnverifyCollection" => {
+                self.process_unverify_collection(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
+            }
+            "ApproveCollectionAuthority" => {
+                self.process_approve_collection_authority(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
+            }
+            "RevokeCollectionAuthority" => {
+                self.process_revoke_collection_authority(
+                    block,
+                    transaction,
+                    program_id,
+                    accounts,
+                    &mut input,
+                );
             }
             _ => {}
         }
     }
-    fn process_deprecated_init_auction_manager_v1(
+    fn process_create_metadata_account(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -246,7 +279,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_deprecated_validate_safety_deposit_box_v1(
+    fn process_update_metadata_account(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -279,7 +312,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_redeem_bid(
+    fn process_deprecated_create_master_edition(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -312,7 +345,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_redeem_full_rights_transfer_bid(
+    fn process_deprecated_mint_new_edition_from_master_edition_via_printing_token(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -345,7 +378,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_deprecated_redeem_participation_bid(
+    fn process_update_primary_sale_happened_via_token(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -378,7 +411,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_start_auction(
+    fn process_deprecated_set_reservation_list(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -411,7 +444,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_claim_bid(
+    fn process_deprecated_create_reservation_list(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -444,7 +477,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_empty_payment_account(
+    fn process_sign_metadata(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -477,7 +510,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_set_store(
+    fn process_deprecated_mint_printing_tokens_via_token(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -510,7 +543,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_set_whitelisted_creator(
+    fn process_deprecated_mint_printing_tokens(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -543,7 +576,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_deprecated_validate_participation(
+    fn process_create_master_edition(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -576,7 +609,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_deprecated_populate_participation_printing_account(
+    fn process_mint_new_edition_from_master_edition_via_token(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -609,7 +642,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_redeem_unused_winning_config_items_as_auctioneer(
+    fn process_convert_master_edition_v1_to_v2(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -642,7 +675,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_decommission_auction_manager(
+    fn process_mint_new_edition_from_master_edition_via_vault_proxy(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -675,7 +708,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_redeem_printing_v2_bid(
+    fn process_puff_metadata(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -708,7 +741,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_withdraw_master_edition(
+    fn process_update_metadata_account_v2(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -741,7 +774,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_deprecated_redeem_participation_bid_v2(
+    fn process_create_metadata_account_v2(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -774,7 +807,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_init_auction_manager_v2(
+    fn process_create_master_edition_v3(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -807,7 +840,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_validate_safety_deposit_box_v2(
+    fn process_verify_collection(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -840,7 +873,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_redeem_participation_bid_v3(
+    fn process_utilize(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -873,7 +906,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_end_auction(
+    fn process_approve_use_authority(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -906,7 +939,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_set_store_index(
+    fn process_revoke_use_authority(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -939,7 +972,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_set_auction_cache(
+    fn process_unverify_collection(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -972,7 +1005,7 @@ impl Handler {
         println!("Write to db {:?}", input);
         Ok(())
     }
-    fn process_set_store_v2(
+    fn process_approve_collection_authority(
         &self,
         block: &SolanaBlock,
         transaction: &TransactionWithStatusMeta,
@@ -997,10 +1030,37 @@ impl Handler {
                     .join(",'"),
             ),
         );
-        input.set_value(
-            "account_name",
-            TransValue::from(accounts.get(0).map(|acc| acc.to_string())),
+
+        input.save();
+        println!("Write to db {:?}", input);
+        Ok(())
+    }
+    fn process_revoke_collection_authority(
+        &self,
+        block: &SolanaBlock,
+        transaction: &TransactionWithStatusMeta,
+        program_id: &Pubkey,
+        accounts: &Vec<Pubkey>,
+        input: &mut TransportValue,
+    ) -> Result<(), anyhow::Error> {
+        println!(
+            "call function process_initialize for handle incoming block {} with argument {:?}",
+            block.block_number, &input.name
         );
+        input.set_value("block_timestamp", TransValue::from(block.timestamp));
+        input.set_value(
+            "tx_hash",
+            TransValue::from(
+                transaction
+                    .transaction
+                    .signatures
+                    .iter()
+                    .map(|sig| sig.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",'"),
+            ),
+        );
+
         input.save();
         println!("Write to db {:?}", input);
         Ok(())
